@@ -1,5 +1,6 @@
-FROM php:7.1-fpm
+FROM php:7.3-fpm
 MAINTAINER owen "chenxin448@126.com"
+
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -7,11 +8,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 更新安装依赖包和PHP核心拓展
 RUN apt-get update && apt-get install -y \
+        git \
         libzip-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng-dev \
         libjpeg-dev \
+        libpng-dev \
         iputils-ping \   
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j$(nproc) gd \
@@ -28,8 +30,10 @@ RUN apt-get update && apt-get install -y \
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 RUN pecl install redis && docker-php-ext-enable redis
 
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+
 # install swoole
-#RUN pecl install swoole && docker-php-ext-enable swoole
+RUN pecl install swoole && docker-php-ext-enable swoole
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
