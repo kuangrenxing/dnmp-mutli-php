@@ -82,6 +82,7 @@ services:
             MYSQL_USER: test
             MYSQL_PASSWORD: 123456
         restart: always
+        command: --default-authentication-plugin=mysql_native_password
 #        command: "--character-set-server=utf8"
         networks:
             - default
@@ -97,6 +98,7 @@ services:
             - ./data/redis:/data
             - ./conf/redis/redis.conf:/etc/redis.conf:ro
           restart: always
+          entrypoint: ["redis-server", "/etc/redis.conf"]
           networks:
             - default
     mongodb:
