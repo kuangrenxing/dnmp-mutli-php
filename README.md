@@ -1,5 +1,5 @@
-# docker-compose-mutli-php
-多版本php环境 php5.6 php7.1 php7.3
+# dnmp-mutli-php
+DNMP（Docker + Nginx + MySQL + PHP7/5多版本 + Redis）是一款全功能的LNMP一键安装程序。
 
 ## 放在/var/www/目录下
 ```ini
@@ -140,4 +140,10 @@ server {
 http://site56.test
 http://site71.test
 http://site73.test
+```
+参考文档
+```bash
+https://github.com/yeszao/dnmp
+https://github.com/Tinywan/dnmp
+https://github.com/c0priwolf/docker-lnmp-with-mutli-php-versions
 ```
