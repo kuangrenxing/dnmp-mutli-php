@@ -3,7 +3,7 @@ services:
     php56:
         build: ./build/php/php56/
         ports:
-            - "9011:9000"
+            - "9010:9000"
         privileged: true
         volumes:
             - /var/www:/var/www:rw
@@ -18,7 +18,22 @@ services:
     php71:
         build: ./build/php/php71/
         ports:
-            - "9012:9000"
+            - "9020:9000"
+        privileged: true
+        volumes:
+            - /var/www:/var/www:rw
+            - ./logs/php71:/var/log/php-fpm:rw
+            - ./conf/php71/php/php.ini:/usr/local/etc/php/php.ini:ro
+            - ./conf/php71/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+        restart: always
+        command: php-fpm
+        networks:
+            - default
+#        container_name: "compose_php_php71"
+    php72:
+        build: ./build/php/php72/
+        ports:
+            - "9030:9000"
         privileged: true
         volumes:
             - /var/www:/var/www:rw
@@ -33,7 +48,7 @@ services:
     php73:
         build: ./build/php/php73/
         ports:
-            - "9013:9000"
+            - "9040:9000"
         privileged: true
         volumes:
             - /var/www:/var/www:rw
@@ -50,6 +65,7 @@ services:
         depends_on:
             - php56
             - php71
+            - php72
             - php73
         volumes:
             - /var/www:/var/www:rw
@@ -57,9 +73,9 @@ services:
             - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./logs/nginx:/var/log/nginx:rw
         ports:
-            - "90:80"
-            - "8091:8080"
-            - "454:443"
+            - "80:80"
+            - "8080:8080"
+            - "443:443"
         privileged: true
         restart: always
         command: nginx -g 'daemon off;'
@@ -70,7 +86,7 @@ services:
     mysql:
         build: ./build/mysql
         ports:
-            - "3317:3306"
+            - "3306:3306"
         privileged: true
         volumes:
             - ./data/mysql:/var/lib/mysql:rw
@@ -92,7 +108,7 @@ services:
     redis:
           build: ./build/redis
           ports:
-            - "6390:6379"
+            - "6379:6379"
           privileged: true
           volumes:
             - ./data/redis:/data
@@ -110,7 +126,7 @@ services:
         - ./data/mongodb:/data/db:rw
         - ./data/mongodb/mongo_key:/mongo:rw
       ports:
-         - "27028:27017"
+         - "27017:27017"
       privileged: true
       networks:
          - default

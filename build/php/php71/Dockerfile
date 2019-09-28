@@ -7,6 +7,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 更新安装依赖包和PHP核心拓展
 RUN apt-get update && apt-get install -y \
+        git \
+        vim \
         libzip-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -23,6 +25,9 @@ RUN apt-get update && apt-get install -y \
 
 # 将预先下载好的拓展包从宿主机拷贝进去
 #COPY ./pkg/redis.tgz /home/redis.tgz
+
+#xdebug安装
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini

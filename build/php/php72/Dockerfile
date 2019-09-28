@@ -1,6 +1,5 @@
-FROM php:7.3-fpm
+FROM php:7.2-fpm
 MAINTAINER owen "chenxin448@126.com"
-
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -13,8 +12,8 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libjpeg-dev \
         libpng-dev \
+        libjpeg-dev \
         iputils-ping \   
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j$(nproc) gd \
@@ -37,7 +36,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # install swoole
-RUN pecl install swoole && docker-php-ext-enable swoole
+#RUN pecl install swoole && docker-php-ext-enable swoole
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer

@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install zip \
         && docker-php-ext-install pdo_mysql \
         && docker-php-ext-install opcache \
-        && docker-php-ext-install mysqli \        
+        && docker-php-ext-install mysqli \
         && rm -r /var/lib/apt/lists/*
 
 # 将预先下载好的拓展包从宿主机拷贝进去
@@ -26,7 +26,9 @@ RUN apt-get update && apt-get install -y \
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
-#RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis-3.1.0 && docker-php-ext-enable redis
+
+RUN pecl install xdebug-2.5.0 && docker-php-ext-enable xdebug
 
 # install swoole
 #RUN pecl install swoole && docker-php-ext-enable swoole
