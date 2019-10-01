@@ -132,6 +132,51 @@ services:
          - default
       command:
          --auth
+
+    elasticsearch:
+        image: elasticsearch:7.3.2
+        environment:
+          - TZ=Asia/Shanghai
+          - cluster.name=docker-cluster
+          - discovery.type=single-node
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        volumes:
+          - ./data/elasticsearch:/usr/share/elasticsearch/data
+        hostname: elasticsearch
+        restart: always
+        ports:
+          - "9200:9200"
+          - "9300:9300"
+        networks:
+         - default
+
+    kibana:
+        image: kibana:7.3.2
+        environment:
+          TZ: Asia/Shanghai
+          elasticsearch.hosts: http://elasticsearch:9200
+        hostname: kibana
+        depends_on:
+          - elasticsearch
+        restart: always
+        ports:
+          - "5601:5601"
+        networks:
+         - default
+
+    logstash:
+        image: logstash:7.3.2
+        hostname: logstash
+        restart: always
+        depends_on:
+          - elasticsearch
+        environment:
+          TZ: Asia/Shanghai
+        ports:
+          - "9600:9600"
+          - "5044:5044"
+        networks:
+         - default
 networks:
 # 配置docker network
     default:
