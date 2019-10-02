@@ -173,6 +173,8 @@ services:
     volumes:
       # 映射到容器中
       - ./conf/logstash/logstash-filebeat.conf:/usr/share/logstash/conf/logstash-filebeat.conf
+    environment:
+      - elasticsearch.hosts=http://elasticsearch:9200
     hostname: logstash
     restart: always
     depends_on:
