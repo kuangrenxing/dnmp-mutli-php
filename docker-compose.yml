@@ -134,14 +134,15 @@ services:
       --auth
 
   elasticsearch:
-    image: elasticsearch:7.3.2
+    build: ./build/elasticsearch
     environment:
-      - TZ=Asia/Shanghai
       - cluster.name=docker-cluster
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
+      - ./conf/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./logs/elasticsearch:/usr/share/elasticsearch/logs
     hostname: elasticsearch
     restart: always
     ports:
@@ -151,10 +152,12 @@ services:
       - default
 
   kibana:
-    image: kibana:7.3.2
+    build: ./build/kibana
     environment:
-      TZ: Asia/Shanghai
       elasticsearch.hosts: http://elasticsearch:9200
+      i18n.locale: "zh-CN"
+    volumes:
+      - ./conf/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     hostname: kibana
     depends_on:
       - elasticsearch
@@ -165,13 +168,15 @@ services:
       - default
 
   logstash:
-    image: logstash:7.3.2
+    build: ./build/logstash
+    command: logstash -f ./conf/logstash-filebeat.conf
+    volumes:
+      # 映射到容器中
+      - ./conf/logstash/logstash-filebeat.conf:/usr/share/logstash/conf/logstash-filebeat.conf
     hostname: logstash
     restart: always
     depends_on:
       - elasticsearch
-    environment:
-      TZ: Asia/Shanghai
     ports:
       - "9600:9600"
       - "5044:5044"
