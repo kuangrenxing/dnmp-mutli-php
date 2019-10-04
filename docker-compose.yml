@@ -188,8 +188,8 @@ networks:
   # 配置docker network
   default:
     driver: bridge
-      #ipam:
-      #   config:
-    # 子网络
-    #      - subnet: 127.20.0.0/16
+    # ipam:
+    #   config:
+    #    # 子网络
+    #     - subnet: 127.20.0.0/16
 
