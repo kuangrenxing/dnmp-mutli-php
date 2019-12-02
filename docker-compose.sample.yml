@@ -92,6 +92,7 @@ services:
       - ./data/mysql:/var/lib/mysql:rw
       - ./logs/mysql:/var/lib/mysql-logs:rw
       - ./conf/mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - ./conf/mysql/conf.d:/etc/mysql/conf.d:ro
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: testdb
