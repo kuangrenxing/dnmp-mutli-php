@@ -15,6 +15,7 @@ services:
     networks:
       - default
   #        container_name: "compose_php_php56"
+
   php71:
     build: ./build/php/php71/
     ports:
@@ -37,14 +38,15 @@ services:
     privileged: true
     volumes:
       - /var/www:/var/www:rw
-      - ./logs/php71:/var/log/php-fpm:rw
-      - ./conf/php71/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - ./conf/php71/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ./logs/php72:/var/log/php-fpm:rw
+      - ./conf/php72/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php72/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
     networks:
       - default
   #        container_name: "compose_php_php71"
+
   php73:
     build: ./build/php/php73/
     ports:
@@ -60,6 +62,7 @@ services:
     networks:
       - default
   #        container_name: "compose_php_php73"
+
   nginx:
     build: ./build/nginx
     depends_on:
@@ -83,6 +86,7 @@ services:
       - default
     # 容器名称
     #container_name: "compose-nginx"
+
   mysql:
     build: ./build/mysql
     ports:
@@ -106,6 +110,22 @@ services:
       # 固定子网ip，网段必须在子网络10.10.*.*
       #ipv4_address: 127.20.0.1
     #container_name: "compose-mysql"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    volumes:
+      - ./conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+      - ./conf/phpmyadmin/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini:ro
+    networks:
+      - default
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - TZ=Asia/Shanghai
+
   redis:
     build: ./build/redis
     ports:
@@ -118,6 +138,19 @@ services:
     entrypoint: ["redis-server", "/etc/redis.conf"]
     networks:
       - default
+
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin:latest
+    container_name: phpredisadmin
+    ports:
+      - "8081:80"
+    networks:
+      - default
+    environment:
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+      - TZ=Asia/Shanghai
+
   mongodb:
     build: ./build/mongodb
     environment:
@@ -133,6 +166,18 @@ services:
       - default
     command:
       --auth
+
+  adminmongo:
+    image: mrvautin/adminmongo
+    container_name: adminmongo
+    ports:
+      - "1234:1234"
+    environment:
+      - HOST=0.0.0.0
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+    networks:
+      - default
 
   elasticsearch:
     build: ./build/elasticsearch
@@ -185,6 +230,7 @@ services:
       - "5044:5044"
     networks:
       - default
+
 networks:
   # 配置docker network
   default:
