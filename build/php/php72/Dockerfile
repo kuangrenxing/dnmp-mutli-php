@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
 #COPY ./pkg/redis.tgz /home/redis.tgz
 
 #xdebug安装
-RUN pecl install xdebug-2.6.1 && docker-php-ext-enable xdebug
+RUN pecl install -f xdebug-2.6.1 && docker-php-ext-enable xdebug
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
