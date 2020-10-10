@@ -52,7 +52,7 @@ services:
     build: ./build/php/php73/
     ports:
       - "9040:9000"
-       - "9511:9511"
+      - "9511:9511"
     privileged: true
     volumes:
       - /var/www:/var/www:rw
@@ -64,6 +64,23 @@ services:
     networks:
       - default
   #        container_name: "compose_php_php73"
+
+  php74:
+    build: ./build/php/php74/
+    ports:
+      - "9074:9000"
+      - "9621:9501"
+    privileged: true
+    volumes:
+      - /var/www:/var/www:rw
+      - ./logs/php74:/var/log/php-fpm:rw
+      - ./conf/php74/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+    restart: always
+    command: php-fpm
+    networks:
+      - default
+    #        container_name: "compose_php_php74"
 
   nginx:
     build: ./build/nginx
