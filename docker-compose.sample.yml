@@ -248,11 +248,10 @@ services:
       - default
 
   memcached:
-    image: 'bitnami/memcached:latest'
-    ports:
-      - "11211:11211"
-    privileged: true
+    build: ./build/memcached
     restart: always
+    ports:
+      - "11221:11211"
     networks:
       - default
 
