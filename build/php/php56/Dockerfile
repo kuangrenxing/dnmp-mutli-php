@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:5.6.32-fpm
 MAINTAINER owen "chenxin448@126.com"
 
 # 设置时区
@@ -9,6 +9,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
         git \
         vim \
+        curl \
+        wget \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -17,6 +19,10 @@ RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libxml2-dev \
         libgpgme11-dev \
+        doxygen \
+        cmake \
+        libmemcached-dev \
+        libevent-dev \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j$(nproc) gd \
         && docker-php-ext-install zip \
@@ -31,7 +37,10 @@ RUN apt-get update && apt-get install -y \
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
-RUN pecl install redis-3.1.0 && docker-php-ext-enable redis
+RUN pecl install redis-4.3.0 && docker-php-ext-enable redis
+
+RUN pecl install memcache-3.0.8 && docker-php-ext-enable memcache
+RUN pecl install memcached-2.2.0 && docker-php-ext-enable memcached
 
 RUN pecl install xdebug-2.5.0 && docker-php-ext-enable xdebug
 

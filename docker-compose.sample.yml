@@ -247,6 +247,15 @@ services:
     networks:
       - default
 
+  memcached:
+    image: 'bitnami/memcached:latest'
+    ports:
+      - "11211:11211"
+    privileged: true
+    restart: always
+    networks:
+      - default
+
 networks:
   # 配置docker network
   default:
