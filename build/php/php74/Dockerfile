@@ -10,6 +10,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
         git \
         vim \
+        procps \
+        curl \
+        wget \
+        lsof \
         libzip-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \

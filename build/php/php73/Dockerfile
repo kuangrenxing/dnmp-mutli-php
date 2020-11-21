@@ -14,6 +14,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
         git \
         vim \
+        procps \
+        curl \
+        wget \
+        lsof \
         autoconf \
 #        openssl-dev \
 #        build-base \
