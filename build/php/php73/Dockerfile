@@ -94,7 +94,7 @@ RUN cd /usr/local/etc/php/conf.d \
         # 这里 host 可以填前面取到的 IP ，也可以填写 host.docker.internal 。
         echo "xdebug.remote_host = host.docker.internal"; \
         # 这里端口固定填写 19000 ，当然可以填写其他的，需要保证没有被占用
-        echo "xdebug.remote_port = 9019"; \
+        echo "xdebug.remote_port = 9000"; \
         # 这里固定即可
         echo "xdebug.idekey=PHPSTORM"; \
         # 把执行结果保存到 99-xdebug-enable.ini 里面去
