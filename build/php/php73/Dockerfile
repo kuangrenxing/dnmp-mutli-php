@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
 #        zlib-dev \
 #        re2c \
 #        oniguruma-dev \
-        libzip-dev \
+        libzip-dev zip unzip\
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libjpeg-dev \
@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install mysqli \
         && docker-php-ext-install bcmath \
         && docker-php-ext-install pcntl \
-        && docker-php-ext-install sockets \
+        && docker-php-ext-install sockets\
         && rm -r /var/lib/apt/lists/*
 
 # 将预先下载好的拓展包从宿主机拷贝进去
