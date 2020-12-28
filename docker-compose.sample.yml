@@ -13,7 +13,8 @@ services:
     restart: always
     command: php-fpm
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.56
   #        container_name: "compose_php_php56"
 
   php71:
@@ -29,7 +30,8 @@ services:
     restart: always
     command: php-fpm
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.71
   #        container_name: "compose_php_php71"
   php72:
     build: ./build/php/php72/
@@ -45,7 +47,8 @@ services:
     restart: always
     command: php-fpm
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.72
   #        container_name: "compose_php_php71"
 
   php73:
@@ -62,7 +65,8 @@ services:
     restart: always
     command: php-fpm
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.73
   #        container_name: "compose_php_php73"
 
   php74:
@@ -79,7 +83,8 @@ services:
     restart: always
     command: php-fpm
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.74
     #        container_name: "compose_php_php74"
 
   nginx:
@@ -101,7 +106,8 @@ services:
     restart: always
     command: nginx -g 'daemon off;'
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.2
     # 容器名称
     #container_name: "compose-nginx"
 
@@ -122,7 +128,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     #        command: "--character-set-server=utf8"
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.36
       # 固定子网ip，网段必须在子网络10.10.*.*
       #ipv4_address: 127.20.0.1
     #container_name: "compose-mysql"
@@ -153,7 +160,8 @@ services:
     restart: always
     entrypoint: ["redis-server", "/etc/redis.conf"]
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.79
 
   phpredisadmin:
     image: erikdubbelboer/phpredisadmin:latest
@@ -211,7 +219,8 @@ services:
       - "9200:9200"
       - "9300:9300"
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.92
 
   kibana:
     build: ./build/kibana
@@ -227,7 +236,8 @@ services:
     ports:
       - "5601:5601"
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.57
 
   logstash:
     build: ./build/logstash
@@ -245,7 +255,8 @@ services:
       - "9600:9600"
       - "5044:5044"
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.96
 
   memcached:
     build: ./build/memcached
@@ -253,14 +264,14 @@ services:
     ports:
       - "11221:11211"
     networks:
-      - default
+      default:
+        ipv4_address: 172.19.0.11
 
 networks:
   # 配置docker network
   default:
     driver: bridge
-    # ipam:
-    #   config:
-    #    # 子网络
-    #     - subnet: 127.20.0.0/16
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
 
