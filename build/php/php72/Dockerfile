@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
         libgpgme11-dev \
         libmemcached-dev libmsgpack-dev libmsgpackc2 zlib1g-dev  \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j$(nproc) gd zip pdo_mysql opcache mysqli bcmath soap sockets zip \
+        && docker-php-ext-install -j$(nproc) gd zip pdo_mysql opcache mysqli bcmath soap sockets \
         && rm -r /var/lib/apt/lists/* \
         &&  pecl install gnupg && echo "extension=gnupg.so" > /usr/local/etc/php/conf.d/gnupg.ini \
         &&  pecl install memcached && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini \
