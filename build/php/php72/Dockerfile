@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
         curl \
         wget \
         lsof \
-        libzip-dev \
+        libzip-dev zip unzip \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -27,8 +27,7 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install -j$(nproc) gd zip pdo_mysql opcache mysqli bcmath soap sockets \
         && rm -r /var/lib/apt/lists/* \
         &&  pecl install gnupg && echo "extension=gnupg.so" > /usr/local/etc/php/conf.d/gnupg.ini \
-        &&  pecl install memcached && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini \
-        && echo 'yes' | pecl install memcache && echo "extension=memcache.so" > /usr/local/etc/php/conf.d/memcache.ini
+        &&  pecl install memcached && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
 
 #xdebug安装
 RUN pecl install -f xdebug-2.6.1 && docker-php-ext-enable xdebug

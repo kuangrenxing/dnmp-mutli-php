@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
         curl \
         wget \
         lsof \
-        libzip-dev \
+        libzip-dev zip unzip\
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libjpeg-dev \
@@ -27,6 +27,8 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install opcache \
         && docker-php-ext-install mysqli \
         && docker-php-ext-install bcmath \
+        && docker-php-ext-install sockets \
+        && docker-php-ext-install libcurl4-openssl-dev \
         && rm -r /var/lib/apt/lists/*
 
 # 将预先下载好的拓展包从宿主机拷贝进去
