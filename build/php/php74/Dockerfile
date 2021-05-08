@@ -60,7 +60,9 @@ RUN mkdir -p ~/build  \
     --enable-curl \
     && make \
     && make install \
-    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini
+    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini \
+    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
+    && echo "swoole.use_shortname = off" >> /usr/local/etc/php/conf.d/99-off-swoole-shortname.ini
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
