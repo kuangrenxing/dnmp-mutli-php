@@ -17,25 +17,23 @@ RUN apt-get update && apt-get install -y \
         libzip-dev zip unzip\
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libjpeg-dev \
         libpng-dev \
+        libssl-dev \
+        libxml2-dev \
+        libjpeg-dev \
         iputils-ping \
+        libgpgme11-dev \
+        libboost-all-dev \
         && docker-php-ext-configure gd --with-freetype --with-jpeg \
-        && docker-php-ext-install -j$(nproc) gd \
-        && docker-php-ext-install zip \
-        && docker-php-ext-install pdo_mysql \
-        && docker-php-ext-install opcache \
-        && docker-php-ext-install mysqli \
-        && docker-php-ext-install bcmath \
-        && docker-php-ext-install sockets \
-        && docker-php-ext-install libcurl4-openssl-dev \
-        && rm -r /var/lib/apt/lists/*
+        && docker-php-ext-install -j$(nproc) gd zip pdo_mysql opcache mysqli bcmath soap sockets \
+        && rm -r /var/lib/apt/lists/* \
+        && pecl install gnupg && echo "extension=gnupg.so" > /usr/local/etc/php/conf.d/gnupg.ini
 
 # 将预先下载好的拓展包从宿主机拷贝进去
 #COPY ./pkg/redis.tgz /home/redis.tgz
 
 #xdebug安装
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+#RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 #RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
@@ -44,13 +42,30 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # install swoole
-RUN pecl install swoole && docker-php-ext-enable swoole
+#RUN pecl install swoole && docker-php-ext-enable swoole
+RUN mkdir -p ~/build  \
+    && cd ~/build  \
+    && rm -rf ./swoole-src  \
+    && wget -c https://github.com/swoole/swoole-src/archive/master.tar.gz -O ./swoole.tar.gz \
+    && tar zxvf ./swoole.tar.gz  \
+    && mv swoole-src* swoole-src  \
+    && cd swoole-src  \
+    && phpize  \
+    && ./configure \
+    --enable-sockets \
+    --enable-openssl --with-php-config=/usr/local/bin/php-config \
+    --enable-http2 \
+#    --enable-mysqlnd && \
+    --enable-json \
+    --enable-curl \
+    && make \
+    && make install \
+    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
-
 
 WORKDIR /var/www
 
