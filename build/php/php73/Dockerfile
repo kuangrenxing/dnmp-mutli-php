@@ -19,11 +19,11 @@ RUN apt-get update && apt-get install -y \
         wget \
         lsof \
         autoconf \
-#        openssl-dev \
 #        build-base \
 #        zlib-dev \
 #        re2c \
 #        oniguruma-dev \
+        libssl-dev \
         libzip-dev zip unzip\
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -31,14 +31,7 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         iputils-ping \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j$(nproc) gd \
-        && docker-php-ext-install zip \
-        && docker-php-ext-install pdo_mysql \
-        && docker-php-ext-install opcache \
-        && docker-php-ext-install mysqli \
-        && docker-php-ext-install bcmath \
-        && docker-php-ext-install pcntl \
-        && docker-php-ext-install sockets\
+        && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql opcache mysqli bcmath soap sockets pcntl mbstring \
         && rm -r /var/lib/apt/lists/*
 
 # 将预先下载好的拓展包从宿主机拷贝进去
@@ -54,7 +47,27 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # install swoole
-RUN pecl install swoole && docker-php-ext-enable swoole
+#RUN pecl install swoole && docker-php-ext-enable swoole
+RUN mkdir -p ~/build  \
+    && cd ~/build  \
+    && rm -rf ./swoole-src  \
+    && wget -c https://github.com/swoole/swoole-src/archive/master.tar.gz -O ./swoole.tar.gz \
+    && tar zxvf ./swoole.tar.gz  \
+    && mv swoole-src* swoole-src  \
+    && cd swoole-src  \
+    && phpize  \
+    && ./configure \
+    --enable-sockets \
+    --enable-openssl --with-php-config=/usr/local/bin/php-config \
+    --enable-http2 \
+#    --enable-mysqlnd && \
+    --enable-json \
+    --enable-curl \
+    && make \
+    && make install \
+    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini \
+    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
+    && echo "swoole.use_shortname = off" >> /usr/local/etc/php/conf.d/99-off-swoole-shortname.ini
 
 # install sdebug
 # 运行克隆前，先把目录切换到 /tmp ，避免之前的命令导致目录错误

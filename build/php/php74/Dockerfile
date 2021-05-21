@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
         libgpgme11-dev \
         libboost-all-dev \
         && docker-php-ext-configure gd --with-freetype --with-jpeg \
-        && docker-php-ext-install -j$(nproc) gd zip pdo_mysql opcache mysqli bcmath soap sockets pcntl \
+        && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql opcache mysqli bcmath soap sockets pcntl mbstring \
         && rm -r /var/lib/apt/lists/* \
         && pecl install gnupg && echo "extension=gnupg.so" > /usr/local/etc/php/conf.d/gnupg.ini
 
