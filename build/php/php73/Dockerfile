@@ -48,71 +48,74 @@ RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # install swoole
 #RUN pecl install swoole && docker-php-ext-enable swoole
-RUN mkdir -p ~/build  \
-    && cd ~/build  \
-    && rm -rf ./swoole-src  \
-    && wget -c https://github.com/swoole/swoole-src/archive/master.tar.gz -O ./swoole.tar.gz \
-    && tar zxvf ./swoole.tar.gz  \
-    && mv swoole-src* swoole-src  \
-    && cd swoole-src  \
-    && phpize  \
-    && ./configure \
-    --enable-sockets \
-    --enable-openssl --with-php-config=/usr/local/bin/php-config \
-    --enable-http2 \
-#    --enable-mysqlnd && \
-    --enable-json \
-    --enable-curl \
-    && make \
-    && make install \
-    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini \
-    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
-    && echo "swoole.use_shortname = off" >> /usr/local/etc/php/conf.d/99-off-swoole-shortname.ini
+#RUN mkdir -p ~/build  \
+#    && cd ~/build  \
+#    && rm -rf ./swoole-src  \
+#    && wget -c https://github.com/swoole/swoole-src/archive/master.tar.gz -O ./swoole.tar.gz \
+#    && tar zxvf ./swoole.tar.gz  \
+#    && mv swoole-src* swoole-src  \
+#    && cd swoole-src  \
+#    && phpize  \
+#    && ./configure \
+#    --enable-sockets \
+#    --enable-openssl --with-php-config=/usr/local/bin/php-config \
+#    --enable-http2 \
+##    --enable-mysqlnd && \
+#    --enable-json \
+#    --enable-curl \
+#    && make \
+#    && make install \
+#    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini \
+#    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
+#    && echo "swoole.use_shortname = off" >> /usr/local/etc/php/conf.d/99-off-swoole-shortname.ini
 
 # install sdebug
 # 运行克隆前，先把目录切换到 /tmp ，避免之前的命令导致目录错误
-RUN cd /tmp \
-    # from mirrors
-    && git clone https://gitee.com/vyi/sdebug sdebug \
-    # 进入克隆的目录
-    && cd sdebug \
-    # 切换到 sdebug_2_7 分支，这里一定到切换分支，因为 master 分支是 Xdebug 的源码
-    && git checkout sdebug_2_7 \
-    && phpize \
-    && ./configure --enable-xdebug \
-    && make \
-    && make install \
-    # 这里 安装完成后执行的值 xdebug
-    && docker-php-ext-enable xdebug \
-    && php -m \
-    # 这里检查也是哟,注意是 sdebug
-    && php --ri sdebug
+#RUN cd /tmp \
+#    # from mirrors
+#    && git clone https://gitee.com/vyi/sdebug sdebug \
+#    # 进入克隆的目录
+#    && cd sdebug \
+#    # 切换到 sdebug_2_7 分支，这里一定到切换分支，因为 master 分支是 Xdebug 的源码
+#    && git checkout sdebug_2_7 \
+#    && phpize \
+#    && ./configure --enable-xdebug \
+#    && make \
+#    && make install \
+#    # 这里 安装完成后执行的值 xdebug
+#    && docker-php-ext-enable xdebug \
+#    && php -m \
+#    # 这里检查也是哟,注意是 sdebug
+#    && php --ri sdebug
 
 
 # config php
-RUN cd /usr/local/etc/php/conf.d \
-    # swoole config
-    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
-    && echo "swoole.use_shortname = off" >> 99-off-swoole-shortname.ini \
-    # config xdebug
-    && { \
-        # 添加一个 Xdebug 节点
-        echo "[Xdebug]"; \
-        # 启用远程连接
-        echo "xdebug.remote_enable = 1"; \
-        # 这个是多人调试，但是现在有些困难，就暂时不启动
-        echo ";xdebug.remote_connect_back = On"; \
-        # 自动启动远程调试
-        echo "xdebug.remote_autostart  = true"; \
-        # 这里 host 可以填前面取到的 IP ，也可以填写 host.docker.internal 。
-        echo "xdebug.remote_host = host.docker.internal"; \
-        # 这里端口固定填写 19000 ，当然可以填写其他的，需要保证没有被占用
-        echo "xdebug.remote_port = 9000"; \
-        # 这里固定即可
-        echo "xdebug.idekey=PHPSTORM"; \
-        # 把执行结果保存到 99-xdebug-enable.ini 里面去
-    } | tee 99-xdebug-enable.ini
+#RUN cd /usr/local/etc/php/conf.d \
+#    # swoole config
+#    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
+#    && echo "swoole.use_shortname = off" >> 99-off-swoole-shortname.ini \
+#    # config xdebug
+#    && { \
+#        # 添加一个 Xdebug 节点
+#        echo "[Xdebug]"; \
+#        # 启用远程连接
+#        echo "xdebug.remote_enable = 1"; \
+#        # 这个是多人调试，但是现在有些困难，就暂时不启动
+#        echo ";xdebug.remote_connect_back = On"; \
+#        # 自动启动远程调试
+#        echo "xdebug.remote_autostart  = true"; \
+#        # 这里 host 可以填前面取到的 IP ，也可以填写 host.docker.internal 。
+#        echo "xdebug.remote_host = host.docker.internal"; \
+#        # 这里端口固定填写 19000 ，当然可以填写其他的，需要保证没有被占用
+#        echo "xdebug.remote_port = 9000"; \
+#        # 这里固定即可
+#        echo "xdebug.idekey=PHPSTORM"; \
+#        # 把执行结果保存到 99-xdebug-enable.ini 里面去
+#    } | tee 99-xdebug-enable.ini
 
+
+#xdebug安装
+RUN pecl install -f xdebug-3.1.6 && docker-php-ext-enable xdebug
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
