@@ -36,7 +36,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 # 安装 mongodb
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 # 安装 swoole todo 未开启
-RUN pecl install swoole
+RUN #pecl install swoole
 #RUN pecl install swoole && docker-php-ext-enable swoole
 
 # 安装 Composer

@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 MAINTAINER owen "chenxin448@126.com"
 
 
@@ -41,9 +41,6 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
-#xdebug安装
-RUN pecl install -f xdebug-3.1.6 && docker-php-ext-enable xdebug
-
 # install swoole
 #RUN pecl install swoole && docker-php-ext-enable swoole
 #RUN mkdir -p ~/build  \
@@ -66,6 +63,9 @@ RUN pecl install -f xdebug-3.1.6 && docker-php-ext-enable xdebug
 #    && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini \
 #    # 关闭 swoole 短名称，使用 Hyperf 这个是必须要
 #    && echo "swoole.use_shortname = off" >> /usr/local/etc/php/conf.d/99-off-swoole-shortname.ini
+
+#xdebug安装
+RUN pecl install -f xdebug-3.2.2 && docker-php-ext-enable xdebug
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer

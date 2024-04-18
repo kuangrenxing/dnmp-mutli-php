@@ -8,7 +8,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./logs/php56:/var/log/php-fpm:rw
-      - ./conf/php56/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php56/php/php.ini:/usr/local/etc/php/php.ini:rw
       - ./conf/php56/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
@@ -25,7 +25,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./logs/php71:/var/log/php-fpm:rw
-      - ./conf/php71/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php71/php/php.ini:/usr/local/etc/php/php.ini:rw
       - ./conf/php71/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
@@ -42,7 +42,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./logs/php72:/var/log/php-fpm:rw
-      - ./conf/php72/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php72/php/php.ini:/usr/local/etc/php/php.ini:rw
       - ./conf/php72/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
@@ -60,7 +60,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./logs/php73:/var/log/php-fpm:rw
-      - ./conf/php73/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php73/php/php.ini:/usr/local/etc/php/php.ini:rw
       - ./conf/php73/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
@@ -78,13 +78,31 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./logs/php74:/var/log/php-fpm:rw
-      - ./conf/php74/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./conf/php74/php/php.ini:/usr/local/etc/php/php.ini:rw
       - ./conf/php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
     restart: always
     command: php-fpm
     networks:
       default:
         ipv4_address: 172.19.0.74
+    #        container_name: "compose_php_php74"
+
+  php80:
+    build: ./build/php/php80/
+    ports:
+      - "9084:9000"
+      - "9631:9501"
+    privileged: true
+    volumes:
+      - ${SOURCE_DIR}:/var/www:rw
+      - ./logs/php80:/var/log/php-fpm:rw
+      - ./conf/php80/php/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./conf/php80/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+    restart: always
+    command: php-fpm
+    networks:
+      default:
+        ipv4_address: 172.19.0.75
     #        container_name: "compose_php_php74"
 
   nginx:
@@ -97,7 +115,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/var/www:rw
       - ./conf/nginx/conf.d:/etc/nginx/conf.d:rw
-      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
       - ./logs/nginx:/var/log/nginx:rw
     ports:
       - "80:80"
@@ -131,7 +149,7 @@ services:
     privileged: true
     volumes:
       - ./logs/mysql:/var/lib/mysql-logs:rw
-      - ./conf/mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./conf/mysql/conf.d:/etc/mysql/conf.d:rw
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: testdb
@@ -153,8 +171,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
-      - ./conf/phpmyadmin/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini:ro
+      - ./conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:rw
+      - ./conf/phpmyadmin/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini:rw
     networks:
       - default
     environment:
@@ -169,7 +187,7 @@ services:
     privileged: true
     volumes:
       - ./data/redis:/data
-      - ./conf/redis/redis.conf:/etc/redis.conf:ro
+      - ./conf/redis/redis.conf:/etc/redis.conf:rw
     restart: always
     entrypoint: ["redis-server", "/etc/redis.conf"]
     networks:
