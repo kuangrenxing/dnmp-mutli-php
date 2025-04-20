@@ -121,7 +121,22 @@ services:
       default:
         ipv4_address: 172.19.0.76
     #        container_name: "compose_php_php74"
-
+  php84:
+    build: ./build/php/php84/
+    ports:
+      - "9086:9000"
+      - "9633:9501"
+    privileged: true
+    volumes:
+      - ${SOURCE_DIR}:/var/www:rw
+      - ./logs/php84:/var/log/php-fpm:rw
+      - ./conf/php84/php/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./conf/php84/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+    restart: always
+    command: php-fpm
+    networks:
+      default:
+        ipv4_address: 172.19.0.77
   nginx:
     build: ./build/nginx
     depends_on:
