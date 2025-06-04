@@ -212,7 +212,25 @@ services:
       # 固定子网ip，网段必须在子网络10.10.*.*
       #ipv4_address: 127.20.0.1
     #container_name: "compose-mysql"
-
+  mysql8:
+    build: ./build/mysql8
+    ports:
+      - "3317:3306"
+    privileged: true
+    volumes:
+      - ./logs/mysql:/var/lib/mysql-logs:rw
+      - ./conf/mysql/conf.d:/etc/mysql/conf.d:rw
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 123456
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    #        command: "--character-set-server=utf8"
+    networks:
+      default:
+        ipv4_address: 172.19.0.37
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
